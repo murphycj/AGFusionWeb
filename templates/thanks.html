@@ -4,21 +4,16 @@
 <script>
   function redirect(){
     setTimeout(function(){
-      document.getElementById("redirect_text").innerHTML = "Redirecting.";
-      setTimeout(function(){
-        document.getElementById("redirect_text").innerHTML = "Redirecting..";
-        setTimeout(function(){
-          document.getElementById("redirect_text").innerHTML = "Redirecting...";
-        },500)
-      },500)
-    },500)
+      document.getElementById("redirect_text").innerHTML = "Redirecting in 1 second...";
+
+    },900)
   }
 </script>
 <body onload="redirect()">
 <p style="text-align: center; font-size: 120%; color: black">
   <b>Thank you!</b><br>
   </br>
-  <p style="text-align: center; color: #bfbfbf" id="redirect_text">Redirecting</p>
+  <p style="text-align: center; color: #bfbfbf" id="redirect_text">Redirecting in 2 seconds...</p>
 
 </p>
 </body>
