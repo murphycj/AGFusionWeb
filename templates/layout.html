@@ -1,0 +1,39 @@
+<!doctype html>
+
+<head>
+  <link rel=stylesheet type=text/css href="{{ url_for('static', filename='stylesheets/bootstrap.css') }}">
+  <script type="text/javascript" src="{{ url_for('static', filename='bootstrap-3.1.1-dist/js/bootstrap.min.js') }}"></script>
+  <link rel='stylesheet' type=text/css href="{{ url_for('static', filename='stylesheets/bootstrap.css') }}">
+  <link rel='stylesheet' type=text/css href="{{ url_for('static', filename='stylesheets/style.css') }}">
+</head>
+
+<body>
+  <title>AGFusion</title>
+  <div class=page>
+
+    <div class="navbar navbar-default navbar-fixed-top" style="color: white">
+      <div class="container">
+        <div class="navbar-header">
+          <a class="navbar-brand" href="/" style="color: white">AGFusion</a>
+        </div>
+        <ul class="nav navbar-nav navbar-right">
+          <li><a href="/gallery"> Gallery ({{ session.gallery_count }})</a></li>
+          <li><a href="/about">About</a></li>
+          <li><a href="/help">Help</a></li>
+        </ul>
+      </div>
+    </div>
+
+    {% block body %}{% endblock %}
+  </div>
+</body>
+<footer>
+  <p style="position: fixed; bottom 0; width:100%; text-align: center">
+    &copy; Copyright 2016, Charlie Murphy. Created using
+    <a href="http://flask.pocoo.org">Flask</a>
+    and
+    <a href="http://jinja.pocoo.org">Jinja</a>.
+    <br>
+    <a href="/feedback">Have feedback?</a>
+  </p>
+</footer>
