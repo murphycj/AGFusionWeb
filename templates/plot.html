@@ -2,10 +2,8 @@
 {% block body %}
 
 <head>
-  <script type="text/javascript" src="http://d3js.org/d3.v3.min.js"></script>
   <script type="text/javascript" src="{{ url_for('static', filename='javascripts/main.js') }}"></script>
   <script type="text/javascript" src="{{ url_for('static', filename='javascripts/mpld3.v0.2.js') }}"></script>
-  <script type="text/javascript" src="{{ url_for('static', filename='javascripts/d3.min.js') }}"></script>
 
   <style>
     .dropbtn {
@@ -15,6 +13,10 @@
         font-size: 16px;
         border: none;
         cursor: pointer;
+    }
+
+    #maindiv {
+      padding-top: 50px;
     }
 
     .dropbtn:hover, .dropbtn:focus {
@@ -52,7 +54,25 @@
   </style>
 </head>
 
-<div>
+<div class="container" style="width:100%; text-align: center" id="maindiv">
+
+  <p style="font-size: 200%;">{{ name }} gene fusion</p>
+  <br>
+
+  <form name="fusion" action="{{ url_for('plot') }}" method="get">
+    <button type="submit" class="btn btn-info" name="cdna">
+      <span class="glyphicon glyphicon-download"></span> cDNA sequences
+    </button>
+
+    <button type="submit" class="btn btn-info" name="cds">
+      <span class="glyphicon glyphicon-download"></span> CDS sequences
+    </button>
+
+    <button type="submit" class="btn btn-info" name="protein">
+      <span class="glyphicon glyphicon-download"></span> Protein sequences
+    </button>
+  </form>
+
   {% for plot in dict_of_plots %}
     <div id="{{ plot['id'] }}"></div>
   {% endfor %}

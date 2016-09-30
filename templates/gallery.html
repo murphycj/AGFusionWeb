@@ -2,13 +2,27 @@
 {% block body %}
 
 <div class="stretch-v">
-  <p style="text-align: center; font-size: 200%; color: #bfbfbf">Your gallery is empty!<p>
-  <p style="text-align: center; font-size: 100%; color: #bfbfbf">
-    The gallery allows you to bring multiple different types of gene <br>
-    fusion plots onto one page, which can then be saved to single image file for publication. <br><br>
-    To add fusions to the gallery, click the "+" button next to any plot you generate on the home page<br><br>
-    The gallery gives you the option of scaling all gene fusions to the same length<br>
-    as well has adding a legend for the protein features.
-  <p>
+
+  {% if session.gallery_count == 0 %}
+    <p style="text-align: center; font-size: 200%; color: #bfbfbf">Your gallery is empty!<p>
+    <p style="text-align: center; font-size: 100%; color: #bfbfbf">
+      The gallery allows you to bring multiple different types of gene <br>
+      fusion plots onto one page, which can then be saved to single image file for publication. <br><br>
+      To add fusions to the gallery, click the "+" button next to any plot you generate on the home page<br><br>
+      The gallery gives you the option of scaling all gene fusions to the same length<br>
+      as well has adding a legend for the protein features.
+    <p>
+  {% else %}
+    {% for plot in dict_of_plots %}
+      <div id="{{ plot['id'] }}"></div>
+    {% endfor %}
+
+    <script type="text/javascript">
+      console.log("BOO1")
+      {% for plot in dict_of_plots %}
+        mpld3.draw_figure("{{ plot['id'] }}", {{ plot['json']|safe }});
+      {% endfor %}
+    </script>
+  {% endif %}
 </div>
 {% endblock %}
