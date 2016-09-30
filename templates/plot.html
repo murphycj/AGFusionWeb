@@ -2,7 +2,10 @@
 {% block body %}
 
 <head>
+  <script type="text/javascript" src="http://d3js.org/d3.v3.min.js"></script>
   <script type="text/javascript" src="{{ url_for('static', filename='javascripts/main.js') }}"></script>
+  <script type="text/javascript" src="{{ url_for('static', filename='javascripts/mpld3.v0.2.js') }}"></script>
+  <script type="text/javascript" src="{{ url_for('static', filename='javascripts/d3.min.js') }}"></script>
 
   <style>
     .dropbtn {
@@ -46,30 +49,16 @@
 </head>
 
 <div>
-  <p style="text-align: center">Annotate and visualize your gene fusions</p>
+  {% for plot in dict_of_plots %}
+    <div id="{{ plot['id'] }}"></div>
+  {% endfor %}
 
-  <div class="dropdown">
-    <button onclick="myFunction()" class="dropbtn">Reference Genome</button>
-    <div id="myDropdown" class="dropdown-content">
-      <a href="#home">GRCh38/hg38</a>
-      <a href="#about">GRCh37/hg19</a>
-      <a href="#contact">GRCm38/mm10</a>
-    </div>
-  </div>
-
-  <form name="fusion" action="{{ url_for('plot') }}" method=post>
-    <input type="text" name="5primegene" placeholder="5' gene",id="5primegene">
-    <input type="text" name="5primeloc" placeholder="5' gene fusion junction" id="5primeloc">
-
-    <input type="text" name="3primegene" placeholder="3' gene" id="3primegene">
-    <input type="text" name="3primeloc" placeholder="3' gene fusion junction" id="3primeloc">
-    <br>
-    <input type="submit" value="Go">
-  </form>
-
-  <button onClick="verify_input()" href="/">Go</button>
-
-  <div class="alert alert-danger" style="visibility: hidden" id="warningDiv">Danger</div>
+  <script type="text/javascript">
+    console.log("BOO1")
+    {% for plot in dict_of_plots %}
+      mpld3.draw_figure("{{ plot['id'] }}", {{ plot['json']|safe }});
+    {% endfor %}
+  </script>
 
 </div>
 
