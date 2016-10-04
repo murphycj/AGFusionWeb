@@ -3,19 +3,78 @@
 
 <head>
   <script type="text/javascript" src="{{ url_for('static', filename='javascripts/main.js') }}"></script>
+  <script type="text/javascript" src="{{ url_for('static', filename='javascripts/mpld3.v0.2.js') }}"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+
+  <script>
+    function get_fusion() {
+
+      var form = document.createElement("form");
+      form.setAttribute("method", "post");
+      form.setAttribute("action", "/");
+
+      //Determine which genome button pressed
+      var genome="";
+
+      if (document.getElementById("grch38").pressed=="yes") {
+        genome = "GRCh38";
+      } else if (document.getElementById("grch37").pressed=="yes") {
+        genome = "GRCh37";
+      } else if (document.getElementById("grcm38").pressed=="yes") {
+        genome = "GRCm38";
+      } else {
+        genome = "none";
+      }
+
+      var params = {
+        submitfusion:'',
+        gene5prime:document.getElementById("5primegene").value,
+        loc5prime:document.getElementById("5primeloc").value,
+        gene3prime:document.getElementById("3primegene").value,
+        loc3prime:document.getElementById("3primeloc").value,
+        genome:genome
+      }
+
+      for(var key in params) {
+        if(params.hasOwnProperty(key)) {
+            var hiddenField = document.createElement("input");
+            hiddenField.setAttribute("type", "hidden");
+            hiddenField.setAttribute("name", key);
+            hiddenField.setAttribute("value", params[key]);
+            form.appendChild(hiddenField);
+         }
+      }
+
+      document.body.appendChild(form);
+      form.submit();
+    }
+
+    function genome_button_click(button_id) {
+
+      var grch38 = document.getElementById("grch38");
+      grch38.style.backgroundColor="white";
+      grch38.pressed="no";
+
+      var grch37 = document.getElementById("grch37");
+      grch37.style.backgroundColor="white";
+      grch37.pressed="no";
+
+      var grcm38 = document.getElementById("grcm38");
+      grcm38.style.backgroundColor="white";
+      grcm38.pressed="no";
+
+      var pressed = document.getElementById(button_id);
+      pressed.style.backgroundColor="#f2f2f2"
+      pressed.pressed="yes";
+    }
+</script>
 
   <style>
     .dropbtn {
-        background-color: #4CAF50;
-        color: white;
         padding: 16px;
         font-size: 16px;
         border: none;
         cursor: pointer;
-    }
-
-    .dropbtn:hover, .dropbtn:focus {
-        background-color: #3e8e41;
     }
 
     .dropdown {
@@ -27,7 +86,7 @@
         display: none;
         position: absolute;
         background-color: #f9f9f9;
-        min-width: 160px;
+        min-width: 200px;
         overflow: auto;
         box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
     }
@@ -39,38 +98,191 @@
         display: block;
     }
 
-    .dropdown a:hover {background-color: #f1f1f1}
+    .dropdown a:hover {background-color: #999999}
 
     .show {display:block;}
+
+    .inner {
+      background-color: white;
+      padding: 0.0cm;
+      margin: 0.1cm;
+      padding-top: 0cm;
+      border-color: black;
+      border-width: thin;
+      border-style: solid;
+      height: 250px;
+      -moz-border-radius-topright:5px;
+      -moz-border-radius-topleft:5px;
+      -webkit-border-top-right-radius:5px;
+      -webkit-border-top-left-radius:5px;
+    }
+    .inner h2 {
+      background:#0059b3;
+      background-color: #0059b3;
+      color:white;
+      padding-top: 15px;
+      margin: 0px;
+      margin-bottom: 20px;
+      width: 100%;
+      height: 50px;
+    }
+
+    .indexbuttons {
+      background-color: #f2f2f2;
+      border-color: #bfbfbf;
+      border-width: thin;
+      border-style: solid;
+      color: black;
+      width: 200px;
+      height: 50px;
+    }
+    .indexbuttons:hover {
+      background-color: #999999;
+    }
+
+    .geneinfo {
+      border-radius:5px;
+      width: 300px;
+      height: 35px;
+    }
+
+    #maindiv {
+      padding-top: 25px;
+    }
+
+    .imagebuttons {
+      font-size: 10px;
+      background-color: white;
+      color: black;
+      border-color: black;
+      text-align: left;
+    }
+
+    .downloadseqbutton {
+      background-color: #0059b3;
+      border-color: #0059b3;
+    }
+
+    g.mpld3-yaxis, g.mpld3-xaxis {
+      display: none;
+    }
+
   </style>
 </head>
 
-<div>
-  <p style="text-align: center">Annotate and visualize your gene fusions</p>
+<div class="container-fluid" style="width:100%; text-align: center;" id="maindiv">
 
-  <div class="dropdown">
-    <button onclick="myFunction()" class="dropbtn">Reference Genome</button>
-    <div id="myDropdown" class="dropdown-content">
-      <a href="#home">GRCh38/hg38</a>
-      <a href="#about">GRCh37/hg19</a>
-      <a href="#contact">GRCm38/mm10</a>
+  <div class="row" style="border-style: solid; border-color: #b3b3b3; border-width: thin; border-radius:10px;">
+
+    <div class="col-md-4" style="text-align: left; padding: 0cm;">
+      <div class="inner">
+        <h2 style="font-size: 115%; text-align: center;"><font color="white"><b>Enter the 5' gene partner</b></font></p></h2>
+        <p style="text-align: left; margin-left: 15px"><font color="#595959"><b>The 5' gene (symbol or ensembl ID):</b></font></p>
+        <input type="text" class="geneinfo" id="5primegene" placeholder="FGFR2",id="5primegene" style="margin-left: 15px; margin-bottom: 20px"  value="{{ gene5prime }}">
+        <p style="text-align: left; margin-left: 15px;"><font color="#595959"><b>The 5' gene junction (genomic coordinates):</b></font></p>
+        <input type="text" class="geneinfo" id="5primeloc" placeholder="130167703" id="5primeloc" style="margin-left: 15px"  value="{{ loc5prime }}">
+      </div>
+
+    </div>
+
+    <div class="col-md-4" style="text-align: left; padding: 0cm;">
+      <div class="inner">
+        <h2 style="font-size: 115%; text-align: center;"><font color="white"><b>Enter the 3' gene partner</b></font></p></h2>
+        <div>
+          <p style="text-align: left; margin-left: 15px;"><font color="#595959"><b>The 3' gene (symbol or ensembl ID):</b></font></p>
+          <input type="text" class="geneinfo" id="3primegene" placeholder="DNM3" id="3primegene" style="margin-left: 15px; margin-bottom: 20px" value="{{ gene3prime }}">
+          <p style="text-align: left; margin-left: 15px;"><font color="#595959"><b>The 3' gene junction (genomic coordinates):</b></font></p>
+          <input type="text" class="geneinfo" id="3primeloc" placeholder="162019992" id="3primeloc"  style="margin-left: 15px"  value="{{ loc3prime }}">
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-4" style="text-align: center; padding: 0cm;">
+      <div class="inner">
+        <h2 style="font-size: 115%; text-align: center;"><font color="white"><b>Select a reference genome</b></font></p></h2>
+        <div class="btn-group-vertical btn-group-lg" role="group" aria-label="..." style="margin-top: 15px;">
+          <button type="button" id="grcm38" pressed="no" onClick="genome_button_click('grcm38')" class="btn btn-default" style="font-size: 90%;">GRCm38/mm10</button>
+          <button type="button" id="grch37" pressed="no" onClick="genome_button_click('grch37')" class="btn btn-default" style="font-size: 90%">GRCh37/hg19</button>
+          <button type="button" id="grch38" pressed="no" onClick="genome_button_click('grch38')" class="btn btn-default" style="font-size: 90%">GRCh38/hg38</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-md-4" style="text-align: center; padding 0cm;">
+        <div style="text-align: middle; vertical-align: center;">
+          <button type="submit" class="btn btn-info indexbuttons" style="height: 50px; padding: 0.5cm; margin: 0.1cm; padding-top: 15px;">
+            <span class="glyphicon glyphicon-plus"></span> Optional parameters
+          </button>
+        </div>
+      </div>
+      <div class="col-md-4"></div>
+      <div class="col-md-4" style="text-align: middle;">
+        <div style="text-align: middle; vertical-align: center;">
+          <!--<form name="fusion" action="{{ url_for('.index') }}" method=post>-->
+          <button type="submit" onClick="get_fusion() "id="getfusion" class="indexbuttons btn btn-info" style="padding: 0.5cm; margin: 0.1cm; padding-top: 15px;" name="submitfusion">Go</button>
+
+        </div>
+      </div>
     </div>
   </div>
 
-  <form name="fusion" action="{{ url_for('plot') }}" method=post>
-    <input type="text" name="5primegene" placeholder="5' gene",id="5primegene">
-    <input type="text" name="5primeloc" placeholder="5' gene fusion junction" id="5primeloc">
+  <div class="row">
+    <div class="alert alert-danger" style="visibility: {{ inputerror }}" id="warningDiv">Error: {{ inputerrormsg }}</div>
+  </div>
 
-    <input type="text" name="3primegene" placeholder="3' gene" id="3primegene">
-    <input type="text" name="3primeloc" placeholder="3' gene fusion junction" id="3primeloc">
+  <div class="row" style="display: {{ plotdisplay }};">
+    <p style="font-size: 200%;"><b>{{ name }} gene fusion</b></p>
     <br>
-    <input type="submit" value="Go">
-  </form>
 
-  <button onClick="verify_input()" href="/">Go</button>
+    <form name="fusion" action="{{ url_for('.index') }}" method="post">
+      <button type="submit" class="btn btn-info downloadseqbutton" name="downloadseq" value="cdna">
+        <span class="glyphicon glyphicon-download"></span> cDNA sequences
+      </button>
 
-  <div class="alert alert-danger" style="visibility: hidden" id="warningDiv">Danger</div>
+      <button type="submit" class="btn btn-info downloadseqbutton" name="downloadseq" value="cds">
+        <span class="glyphicon glyphicon-download"></span> CDS sequences
+      </button>
 
+      <button type="submit" class="btn btn-info downloadseqbutton" name="downloadseq" value="protein">
+        <span class="glyphicon glyphicon-download"></span> Protein sequences
+      </button>
+
+      <!--
+      <button type="submit" class="btn btn-info downloadseqbutton" name="downloadseq" value="images">
+        <span class="glyphicon glyphicon-download"></span> All images
+      </button>
+      -->
+    </form>
+
+    <br>
+
+    <p style="font-size: 100%;">Below are images of all isoform combinations predicted to form a functional protein</p>
+
+    <hr>
+
+    <form name="fusion" action="{{ url_for('.index') }}" method="post">
+    {% for plot in dict_of_plots %}
+      <div id="{{ plot['id'] }}"></div>
+      <div class="container" style="width:100%; text-align: right">
+          <button type="submit" class="btn btn-info imagebuttons" name="downloadimage" value="{{ plot['id'] }}_png">
+            <span class="glyphicon glyphicon-download"></span> PNG
+          </button>
+          <button type="submit" class="btn btn-info imagebuttons" name="downloadimage" value="{{ plot['id'] }}_pdf">
+            <span class="glyphicon glyphicon-download"></span> PDF
+          </button>
+      </div>
+      <hr>
+    {% endfor %}
+    </form>
+
+    <script type="text/javascript">
+      {% for plot in dict_of_plots %}
+        mpld3.draw_figure("{{ plot['id'] }}", {{ plot['json']|safe }});
+      {% endfor %}
+    </script>
+  </div>
 </div>
+
 
 {% endblock %}

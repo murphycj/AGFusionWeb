@@ -8,31 +8,35 @@
   <link rel='stylesheet' type=text/css href="{{ url_for('static', filename='stylesheets/style.css') }}">
 </head>
 
-<body>
+<body style="height: 100%">
   <title>AGFusion</title>
-  <div class=page>
+  <div style="min-height: 100%;">
+    <div class=page>
 
-    <div class="navbar navbar-default navbar-fixed-top" style="color: white">
-      <div class="container">
-        <div class="navbar-header">
-          <a class="navbar-brand" href="/" style="color: white">Annotate Gene Fusion (AGFusion)</a>
+      <div class="navbar navbar-default navbar-fixed-top" style="color: white">
+        <div class="container">
+          <div class="navbar-header">
+            <a class="navbar-brand" href="/" style="color: white">Annotate Gene Fusion (AGFusion)</a>
+          </div>
+          <ul class="nav navbar-nav navbar-right">
+            <!--<li><a href="/gallery"> Gallery ({{ session.gallery_count }})</a></li>-->
+            <li><a href="/about">About</a></li>
+            <!--<li><a href="/help">Help</a></li>-->
+          </ul>
         </div>
-        <ul class="nav navbar-nav navbar-right">
-          <li><a href="/gallery"> Gallery ({{ session.gallery_count }})</a></li>
-          <li><a href="/about">About</a></li>
-          <li><a href="/help">Help</a></li>
-        </ul>
       </div>
-    </div>
 
-    {% block body %}{% endblock %}
+      {% block body %}{% endblock %}
+    </div>
+    <div style="position: absolute; bottom 0; width:100%; text-align: center">
+      <p>
+        &copy; Copyright 2016, Charlie Murphy. Created using
+        <a href="http://flask.pocoo.org">Flask</a>
+        and
+        <a href="http://jinja.pocoo.org">Jinja</a>.
+      </p>
+      <br>
+      <p style="text-align: center; width:100%;"><a href="/feedback">Have feedback?</a></p>
+    </div>
   </div>
-  <p style="position: fixed; bottom 0; width:100%; text-align: center">
-    &copy; Copyright 2016, Charlie Murphy. Created using
-    <a href="http://flask.pocoo.org">Flask</a>
-    and
-    <a href="http://jinja.pocoo.org">Jinja</a>.
-  </p>
-  <br>
-  <p style="text-align: center; position: fixed; width:100%;"><a href="/feedback">Have feedback?</a></p>
 </body>
