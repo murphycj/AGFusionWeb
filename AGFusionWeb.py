@@ -236,3 +236,6 @@ def feedback():
 @app.route('/thanks')
 def thanks():
     return render_template('thanks.html')
+
+if __name__ == '__main__':
+      app.run(host='0.0.0.0', port=80)
