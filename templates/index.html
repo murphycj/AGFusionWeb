@@ -7,32 +7,26 @@
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
 
   <script>
-    function get_fusion() {
+    function run_example() {
+
+      genome_button_click("grcm38");
 
       var form = document.createElement("form");
       form.setAttribute("method", "post");
       form.setAttribute("action", "/");
 
-      //Determine which genome button pressed
-      var genome="";
-
-      if (document.getElementById("grch38").pressed=="yes") {
-        genome = "GRCh38";
-      } else if (document.getElementById("grch37").pressed=="yes") {
-        genome = "GRCh37";
-      } else if (document.getElementById("grcm38").pressed=="yes") {
-        genome = "GRCm38";
-      } else {
-        genome = "none";
-      }
-
       var params = {
         submitfusion:'',
-        gene5prime:document.getElementById("5primegene").value,
-        loc5prime:document.getElementById("5primeloc").value,
-        gene3prime:document.getElementById("3primegene").value,
-        loc3prime:document.getElementById("3primeloc").value,
-        genome:genome
+        gene5prime:"ENSMUSG00000022770",
+        loc5prime:"31684294",
+        gene3prime:"ENSMUSG00000002413",
+        loc3prime:"39648486",
+        genome:"GRCm38",
+        imageheight:"2",
+        imagewidth:"8",
+        dpi:"90",
+        fontsize:"12",
+        scale:"0"
       }
 
       for(var key in params) {
@@ -49,23 +43,114 @@
       form.submit();
     }
 
+    function download_image(file_type,image_key) {
+
+      var form = document.createElement("form");
+      form.setAttribute("method", "post");
+      form.setAttribute("action", "/");
+
+      var params = {
+        downloadimage:file_type,
+        imageheight:document.getElementById("imageheight").value,
+        imagewidth:document.getElementById("imagewidth").value,
+        dpi:document.getElementById("dpi").value,
+        fontsize:document.getElementById("fontsize").value,
+        scale:document.getElementById("scale").value,
+        image_key:image_key
+      }
+
+      for(var key in params) {
+        if(params.hasOwnProperty(key)) {
+            var hiddenField = document.createElement("input");
+            hiddenField.setAttribute("type", "hidden");
+            hiddenField.setAttribute("name", key);
+            hiddenField.setAttribute("value", params[key]);
+            form.appendChild(hiddenField);
+         }
+      }
+
+      document.body.appendChild(form);
+      form.submit();
+    }
+
+    function get_fusion() {
+
+      var form = document.createElement("form");
+      form.setAttribute("method", "post");
+      form.setAttribute("action", "/");
+
+      //Determine which genome button pressed
+      var genome="";
+
+      if (document.getElementById("grch38").style.backgroundColor==="rgb(211, 211, 211)") {
+        genome = "GRCh38";
+        document.getElementById("grch37").style.backgroundColor="white";
+        document.getElementById("grcm38").style.backgroundColor="white";
+      } else if (document.getElementById("grch37").style.backgroundColor==="rgb(211, 211, 211)") {
+        genome = "GRCh37";
+        document.getElementById("grch38").style.backgroundColor="white";
+        document.getElementById("grcm38").style.backgroundColor="white";
+      } else if (document.getElementById("grcm38").style.backgroundColor==="rgb(211, 211, 211)") {
+        genome = "GRCm38";
+        document.getElementById("grch37").style.backgroundColor="white";
+        document.getElementById("grch38").style.backgroundColor="white";
+      } else {
+        genome = "none";
+      }
+
+      var params = {
+        submitfusion:'',
+        gene5prime:document.getElementById("5primegene").value,
+        loc5prime:document.getElementById("5primeloc").value,
+        gene3prime:document.getElementById("3primegene").value,
+        loc3prime:document.getElementById("3primeloc").value,
+        genome:genome,
+        imageheight:document.getElementById("imageheight").value,
+        imagewidth:document.getElementById("imagewidth").value,
+        dpi:document.getElementById("dpi").value,
+        fontsize:document.getElementById("fontsize").value,
+        scale:document.getElementById("scale").value
+      }
+
+      for(var key in params) {
+        if(params.hasOwnProperty(key)) {
+            var hiddenField = document.createElement("input");
+            hiddenField.setAttribute("type", "hidden");
+            hiddenField.setAttribute("name", key);
+            hiddenField.setAttribute("value", params[key]);
+            form.appendChild(hiddenField);
+         }
+      }
+
+      document.body.appendChild(form);
+      form.submit();
+    }
+
+    function displayOptionalParameters() {
+
+      var b = document.getElementById("optionalparams");
+
+      if (b.style.display=='block') {
+        b.style.display='none';
+      } else {
+        b.style.display='block';
+      }
+
+    }
+
     function genome_button_click(button_id) {
 
       var grch38 = document.getElementById("grch38");
       grch38.style.backgroundColor="white";
-      grch38.pressed="no";
 
       var grch37 = document.getElementById("grch37");
       grch37.style.backgroundColor="white";
-      grch37.pressed="no";
 
       var grcm38 = document.getElementById("grcm38");
       grcm38.style.backgroundColor="white";
-      grcm38.pressed="no";
 
       var pressed = document.getElementById(button_id);
-      pressed.style.backgroundColor="#f2f2f2"
-      pressed.pressed="yes";
+      pressed.style.backgroundColor="lightgrey"
     }
 </script>
 
@@ -146,16 +231,39 @@
       height: 35px;
     }
 
+    .optionparams {
+      border-radius:5px;
+      width: 70px;
+      height: 35px;
+      text-align: center;
+    }
+
     #maindiv {
       padding-top: 25px;
     }
 
     .imagebuttons {
-      font-size: 10px;
+      font-size: 12px;
       background-color: white;
       color: black;
       border-color: black;
       text-align: left;
+    }
+    .imagebuttons:hover {
+      background: #e6e6e6;
+      border: #cccccc
+    }
+
+    .effectbuttons {
+      font-size: 12px;
+      background-color: white;
+      color: black;
+      border-color: black;
+      text-align: left;
+      height: 20px;
+      pointer-events: none;
+      line-height: 8px;
+      margin-top: 5px;
     }
 
     .downloadseqbutton {
@@ -166,6 +274,8 @@
     g.mpld3-yaxis, g.mpld3-xaxis {
       display: none;
     }
+
+
 
   </style>
 </head>
@@ -178,9 +288,9 @@
       <div class="inner">
         <h2 style="font-size: 115%; text-align: center;"><font color="white"><b>Enter the 5' gene partner</b></font></p></h2>
         <p style="text-align: left; margin-left: 15px"><font color="#595959"><b>The 5' gene (symbol or ensembl ID):</b></font></p>
-        <input type="text" class="geneinfo" id="5primegene" placeholder="FGFR2",id="5primegene" style="margin-left: 15px; margin-bottom: 20px"  value="{{ gene5prime }}">
+        <input type="text" class="geneinfo" id="5primegene" placeholder="FGFR2" style="margin-left: 15px; margin-bottom: 20px"  value="{{ params.gene5prime }}">
         <p style="text-align: left; margin-left: 15px;"><font color="#595959"><b>The 5' gene junction (genomic coordinates):</b></font></p>
-        <input type="text" class="geneinfo" id="5primeloc" placeholder="130167703" id="5primeloc" style="margin-left: 15px"  value="{{ loc5prime }}">
+        <input type="text" class="geneinfo" id="5primeloc" placeholder="130167703" style="margin-left: 15px"  value="{{ params.loc5prime }}">
       </div>
 
     </div>
@@ -190,9 +300,9 @@
         <h2 style="font-size: 115%; text-align: center;"><font color="white"><b>Enter the 3' gene partner</b></font></p></h2>
         <div>
           <p style="text-align: left; margin-left: 15px;"><font color="#595959"><b>The 3' gene (symbol or ensembl ID):</b></font></p>
-          <input type="text" class="geneinfo" id="3primegene" placeholder="DNM3" id="3primegene" style="margin-left: 15px; margin-bottom: 20px" value="{{ gene3prime }}">
+          <input type="text" class="geneinfo" id="3primegene" placeholder="DNM3" style="margin-left: 15px; margin-bottom: 20px" value="{{ params.gene3prime }}">
           <p style="text-align: left; margin-left: 15px;"><font color="#595959"><b>The 3' gene junction (genomic coordinates):</b></font></p>
-          <input type="text" class="geneinfo" id="3primeloc" placeholder="162019992" id="3primeloc"  style="margin-left: 15px"  value="{{ loc3prime }}">
+          <input type="text" class="geneinfo" id="3primeloc" placeholder="162019992"  style="margin-left: 15px"  value="{{ params.loc3prime }}">
         </div>
       </div>
     </div>
@@ -201,38 +311,88 @@
       <div class="inner">
         <h2 style="font-size: 115%; text-align: center;"><font color="white"><b>Select a reference genome</b></font></p></h2>
         <div class="btn-group-vertical btn-group-lg" role="group" aria-label="..." style="margin-top: 15px;">
-          <button type="button" id="grcm38" pressed="no" onClick="genome_button_click('grcm38')" class="btn btn-default" style="font-size: 90%;">GRCm38/mm10</button>
-          <button type="button" id="grch37" pressed="no" onClick="genome_button_click('grch37')" class="btn btn-default" style="font-size: 90%">GRCh37/hg19</button>
-          <button type="button" id="grch38" pressed="no" onClick="genome_button_click('grch38')" class="btn btn-default" style="font-size: 90%">GRCh38/hg38</button>
+          <button type="button" id="grcm38" onClick="genome_button_click('grcm38')" class="btn btn-default" style="font-size: 90%; background-color: {{ params.grcm38_color }};">GRCm38/mm10</button>
+          <button type="button" id="grch37" onClick="genome_button_click('grch37')" class="btn btn-default" style="font-size: 90%; background-color: {{ params.grch37_color }};">GRCh37/hg19</button>
+          <button type="button" id="grch38" onClick="genome_button_click('grch38')" class="btn btn-default" style="font-size: 90%; background-color: {{ params.grch38_color }};">GRCh38/hg38</button>
         </div>
       </div>
     </div>
 
     <div class="row">
-      <div class="col-md-4" style="text-align: center; padding 0cm;">
+      <div class="col-md-2" style="text-align: center; padding 0cm;">
         <div style="text-align: middle; vertical-align: center;">
-          <button type="submit" class="btn btn-info indexbuttons" style="height: 50px; padding: 0.5cm; margin: 0.1cm; padding-top: 15px;">
+          <button type="submit" class="btn btn-info indexbuttons" onClick="displayOptionalParameters()" style="height: 30px; padding: 0.5cm; margin: 0.3cm; padding-top: 5px;">
             <span class="glyphicon glyphicon-plus"></span> Optional parameters
           </button>
         </div>
+      </div>
+      <div class="col-md-2">
+        <button type="submit" class="btn btn-info indexbuttons" onClick="run_example()" style="height: 30px; width: 150px; padding: 0.5cm; margin: 0.3cm; padding-top: 5px;">
+          Example
+        </button>
       </div>
       <div class="col-md-4"></div>
       <div class="col-md-4" style="text-align: middle;">
         <div style="text-align: middle; vertical-align: center;">
           <!--<form name="fusion" action="{{ url_for('.index') }}" method=post>-->
-          <button type="submit" onClick="get_fusion() "id="getfusion" class="indexbuttons btn btn-info" style="padding: 0.5cm; margin: 0.1cm; padding-top: 15px;" name="submitfusion">Go</button>
+          <button type="submit" onClick="get_fusion()" id="getfusion" class="indexbuttons btn btn-info" style="padding: 0.5cm; font-size: 150%; margin: 0.1cm; padding-top: 10px;" name="submitfusion">Go</button>
 
+        </div>
+      </div>
+    </div>
+
+    <div class="row" id="optionalparams" style="display: {{ params.optionalparameterdisplay }};">
+      <div class="col-md-6">
+        <div class="row">
+          <div class="col-md-2">
+            <p style="text-align: center; margin-left: 15px; width: 100px;"><font color="#595959"><b>Font size:</b></font></p>
+          </div>
+          <div class="col-md-2">
+            <input type="text" class="optionparams" id="fontsize" style="margin-left: 15px; margin-bottom: 20px" value="{{ params.fontsize }}">
+          </div>
+
+          <div class="col-md-2">
+            <p style="text-align: center; margin-left: 15px; width: 100px;"><font color="#595959"><b>Dots per inch:</b></font></p>
+          </div>
+          <div class="col-md-2">
+            <input type="text" class="optionparams" id="dpi" style="margin-left: 15px; margin-bottom: 20px" value="{{ params.dpi }}">
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-md-2 optionparamsdiv">
+            <p style="text-align: center; margin-left: 15px; width: 100px;"><font color="#595959"><b>Image width (inches):</b></font></p>
+          </div>
+          <div class="col-md-2">
+            <input type="text" class="optionparams" id="imagewidth" style="margin-left: 15px; margin-bottom: 20px" value="{{ params.imagewidth }}">
+          </div>
+
+          <div class="col-md-2">
+            <p style="text-align: center; margin-left: 15px; width: 100px;"><font color="#595959"><b>Image height (inches):</b></font></p>
+          </div>
+          <div class="col-md-2">
+            <input type="text" class="optionparams" id="imageheight" style="margin-left: 15px; margin-bottom: 20px" value="{{ params.imageheight }}">
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-md-2">
+            <p style="text-align: center; margin-left: 15px; width: 100px;"><font color="#595959"><b>Scale:</b></font></p>
+          </div>
+          <div class="col-md-2">
+            <input type="text" class="optionparams" id="scale" style="margin-left: 15px; margin-bottom: 20px;" value="{{ params.scale }}">
+          </div>
         </div>
       </div>
     </div>
   </div>
 
   <div class="row">
-    <div class="alert alert-danger" style="visibility: {{ inputerror }}" id="warningDiv">Error: {{ inputerrormsg }}</div>
+    <div class="alert alert-danger" style="visibility: {{ params.inputerror }}" id="warningDiv">Error: {{ params.inputerrormsg }}</div>
   </div>
 
-  <div class="row" style="display: {{ plotdisplay }};">
-    <p style="font-size: 200%;"><b>{{ name }} gene fusion</b></p>
+  <div class="row" style="display: {{ params.plotdisplay }};">
+    <p style="font-size: 200%;"><b>{{ params.name }} gene fusion</b></p>
     <br>
 
     <form name="fusion" action="{{ url_for('.index') }}" method="post">
@@ -261,28 +421,46 @@
 
     <hr>
 
-    <form name="fusion" action="{{ url_for('.index') }}" method="post">
-    {% for plot in dict_of_plots %}
-      <div id="{{ plot['id'] }}"></div>
-      <div class="container" style="width:100%; text-align: right">
-          <button type="submit" class="btn btn-info imagebuttons" name="downloadimage" value="{{ plot['id'] }}_png">
-            <span class="glyphicon glyphicon-download"></span> PNG
-          </button>
-          <button type="submit" class="btn btn-info imagebuttons" name="downloadimage" value="{{ plot['id'] }}_pdf">
-            <span class="glyphicon glyphicon-download"></span> PDF
-          </button>
-      </div>
-      <hr>
-    {% endfor %}
-    </form>
+    {% if dict_of_plots|length > 0 %}
 
-    <script type="text/javascript">
       {% for plot in dict_of_plots %}
-        mpld3.draw_figure("{{ plot['id'] }}", {{ plot['json']|safe }});
+        <div id="{{ plot['id'] }}"></div>
+        <!--<div class="container" style="width:100%; text-align: right">-->
+        <div class="row">
+          <div class="col-md-4"></div>
+          <div class="col-md-4">
+            <button type="submit" class="btn btn-info effectbuttons" name="downloadimage" value="{{ plot['id'] }}_png">
+              5' location: {{ effects[plot['id']]['5prime_effect'] }}
+            </button>
+            <button type="submit" class="btn btn-info effectbuttons" style="pointer-events: none;" name="downloadimage" value="{{ plot['id'] }}_pdf">
+              3' location: {{ effects[plot['id']]['3prime_effect'] }}
+            </button>
+            <button type="submit" class="btn btn-info effectbuttons" style="pointer-events: none;" name="downloadimage" value="{{ plot['id'] }}_pdf">
+              Effect: {{ effects[plot['id']]['effect'] }}
+            </button>
+          </div>
+          <div class="col-md-4">
+            <button type="submit" class="btn btn-info imagebuttons" name="downloadimage" value="{{ plot['id'] }}_png" onClick="download_image('png','{{ plot['id'] }}')">
+              <span class="glyphicon glyphicon-download"></span> PNG
+            </button>
+            <button type="submit" class="btn btn-info imagebuttons" name="downloadimage" value="{{ plot['id'] }}_pdf" onClick="download_image('pdf','{{ plot['id'] }}')">
+              <span class="glyphicon glyphicon-download"></span> PDF
+            </button>
+          </div>
+        </div>
+        <hr>
       {% endfor %}
-    </script>
+
+      <script type="text/javascript">
+        {% for plot in dict_of_plots %}
+          mpld3.draw_figure("{{ plot['id'] }}", {{ plot['json']|safe }});
+        {% endfor %}
+      </script>
+
+    {% else %}
+      <p style="font-size: 200%; color: #bfbfbf"> None of the fusion transcripts are predicted to be protein coding!</p>
+    {% endif %}
   </div>
 </div>
-
 
 {% endblock %}

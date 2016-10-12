@@ -2,41 +2,51 @@
 
 <head>
   <link rel=stylesheet type=text/css href="{{ url_for('static', filename='stylesheets/bootstrap.css') }}">
-  <script type="text/javascript" src="{{ url_for('static', filename='bootstrap-3.1.1-dist/js/bootstrap.min.js') }}"></script>
+  <script type="text/javascript" src="{{ url_for('static', filename='bootstrap-3.3.7-dist/js/bootstrap.min.js') }}"></script>
   <script type="text/javascript" src="http://d3js.org/d3.v3.min.js"></script>
   <link rel='stylesheet' type=text/css href="{{ url_for('static', filename='stylesheets/bootstrap.css') }}">
   <link rel='stylesheet' type=text/css href="{{ url_for('static', filename='stylesheets/style.css') }}">
+
+  <style>
+  .navbar-fixed-bottom > li > a{
+    padding-top:4px !important;
+    padding-bottom:0 !important;
+    height: 28px;
+  }
+  .navbar {min-height:28px !important;}
+  </style>
+
 </head>
 
-<body style="height: 100%">
+<body style="height: 100%; padding-bottom: 70px;">
   <title>AGFusion</title>
-  <div style="min-height: 100%;">
-    <div class=page>
 
-      <div class="navbar navbar-default navbar-fixed-top" style="color: white">
-        <div class="container">
-          <div class="navbar-header">
-            <a class="navbar-brand" href="/" style="color: white">Annotate Gene Fusion (AGFusion)</a>
-          </div>
-          <ul class="nav navbar-nav navbar-right">
-            <!--<li><a href="/gallery"> Gallery ({{ session.gallery_count }})</a></li>-->
-            <li><a href="/about">About</a></li>
-            <!--<li><a href="/help">Help</a></li>-->
-          </ul>
+  <div class=page>
+
+    <div class="navbar navbar-default navbar-fixed-top" style="color: white">
+      <div class="container">
+        <div class="navbar-header">
+          <a class="navbar-brand" href="/" style="color: white">Annotate Gene Fusion (AGFusion)</a>
         </div>
+        <ul class="nav navbar-nav navbar-right">
+          <!--<li><a href="/gallery"> Gallery ({{ session.gallery_count }})</a></li>-->
+          <li><a href="/about">About</a></li>
+          <!--<li><a href="/help">Help</a></li>-->
+        </ul>
       </div>
-
+    </div>
+    <div class="scroll">
       {% block body %}{% endblock %}
     </div>
-    <div style="position: absolute; bottom 0; width:100%; text-align: center">
-      <p>
-        &copy; Copyright 2016, Charlie Murphy. Created using
-        <a href="http://flask.pocoo.org">Flask</a>
-        and
-        <a href="http://jinja.pocoo.org">Jinja</a>.
-      </p>
-      <br>
-      <p style="text-align: center; width:100%;"><a href="/feedback">Have feedback?</a></p>
-    </div>
+  </div>
+  <div class="navbar navbar-fixed-bottom" style="text-align: center; background-color: #F3F3F3; padding-top: 5px; height: 10px;">
+    <p>
+      &copy; Copyright 2016, Charlie Murphy. Created using
+      <a href="http://flask.pocoo.org">Flask</a>
+      and
+      <a href="http://jinja.pocoo.org">Jinja</a>.
+    </p>
+    <br>
+    <!--<p style="text-align: center; width:100%;"><a href="/feedback">Have feedback?</a></p>-->
   </div>
 </body>
