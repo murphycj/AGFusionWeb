@@ -203,28 +203,34 @@ def index():
                 db=db,
                 pyensembl_data=pyensembl_data
             )
-        except agfusion.exceptions.GeneIDException5prime:
+        except agfusion.exceptions.GeneIDException5prime as e:
 
-            params['inputerrormsg']="Your 5' gene is not valid, or the reference genome is incorrect."
+            params['inputerrormsg'] = e
             params['inputerror']='visible'
             return render_template('index.html',params=params)
 
-        except agfusion.exceptions.GeneIDException3prime:
+        except agfusion.exceptions.GeneIDException3prime as e:
 
-            params['inputerrormsg'] = "Your 3' gene is not valid, or the reference genome is incorrect."
+            params['inputerrormsg'] = e
             params['inputerror'] = 'visible'
             return render_template('index.html',params=params)
 
-        except agfusion.exceptions.JunctionException5prime:
+        except agfusion.exceptions.JunctionException5prime as e:
 
-            params['inputerrormsg']="Your 5' gene junction is outside the gene boundaries, or the reference genome is incorrect."
-            params['inputerror']='visible'
+            params['inputerrormsg'] = e
+            params['inputerror'] = 'visible'
             return render_template('index.html',params=params)
 
-        except agfusion.exceptions.JunctionException3prime:
+        except agfusion.exceptions.JunctionException3prime as e:
 
-            params['inputerrormsg']="Your 3' gene junction is outside the gene boundaries, or the reference genome is incorrect."
-            params['inputerror']='visible'
+            params['inputerrormsg'] = e
+            params['inputerror'] = 'visible'
+            return render_template('index.html',params=params)
+
+        except agfusion.exceptions.TooManyGenesException as e:
+
+            params['inputerrormsg'] = e
+            params['inputerror'] = 'visible'
             return render_template('index.html',params=params)
 
         #save the fusion output and visualize
