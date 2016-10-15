@@ -2,6 +2,7 @@ import sqlite3
 import os
 import uuid
 import pickle
+from datetime import timedelta
 
 import agfusion
 import jsonpickle
@@ -131,6 +132,12 @@ def set_genome(params):
         params['grcm38_color'] = "lightgrey"
 
     return params, pyensembl_data
+
+@app.before_request
+def session_timeout():
+    session.permanent=True
+    app.permanent_session_lifetime=timedelta(minutes=60)
+    print 'boo'
 
 @app.route('/',methods=['GET','POST'])
 def index():

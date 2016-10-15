@@ -7,6 +7,11 @@
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
 
   <script>
+    function loading() {
+      var example_button = document.getElementById("examplebutton");
+      example_button.innerHTML="<span style=\"visibility: visible\" class=\"glyphicon glyphicon-refresh glyphicon-refresh-animate\"></span>Loading...";
+    }
+
     function run_example() {
 
       genome_button_click("grcm38");
@@ -41,6 +46,7 @@
 
       document.body.appendChild(form);
       form.submit();
+      //examplebutton.innerHTML="!!";
     }
 
     function download_image(file_type,image_key) {
@@ -74,6 +80,10 @@
     }
 
     function get_fusion() {
+
+      var go_button = document.getElementById("getfusion");
+
+      go_button.innerHTML="<span id=\"testbutton_span\" style=\"visibility: visible\" class=\"glyphicon glyphicon-refresh glyphicon-refresh-animate\"></span>Loading...";
 
       var form = document.createElement("form");
       form.setAttribute("method", "post");
@@ -124,6 +134,7 @@
 
       document.body.appendChild(form);
       form.submit();
+      go_button.innerHTML="Go";
     }
 
     function displayOptionalParameters() {
@@ -152,6 +163,7 @@
       var pressed = document.getElementById(button_id);
       pressed.style.backgroundColor="lightgrey"
     }
+
 </script>
 
   <style>
@@ -275,7 +287,20 @@
       display: none;
     }
 
+    .glyphicon-refresh-animate {
+      -animation: spin .7s infinite linear;
+      -webkit-animation: spin2 .7s infinite linear;
+    }
 
+    @-webkit-keyframes spin2 {
+        from { -webkit-transform: rotate(0deg);}
+        to { -webkit-transform: rotate(360deg);}
+    }
+
+    @keyframes spin {
+        from { transform: scale(1) rotate(0deg);}
+        to { transform: scale(1) rotate(360deg);}
+    }
 
   </style>
 </head>
@@ -287,7 +312,7 @@
     <div class="col-md-4" style="text-align: left; padding: 0cm;">
       <div class="inner">
         <h2 style="font-size: 115%; text-align: center;"><font color="white"><b>Enter the 5' gene partner</b></font></p></h2>
-        <p style="text-align: left; margin-left: 15px"><font color="#595959"><b>The 5' gene (symbol or ensembl ID):</b></font></p>
+        <p style="text-align: left; margin-left: 15px"><font color="#595959"><b>The 5' gene (symbol or Ensembl ID):</b></font></p>
         <input type="text" class="geneinfo" id="5primegene" placeholder="FGFR2" style="margin-left: 15px; margin-bottom: 20px"  value="{{ params.gene5prime }}">
         <p style="text-align: left; margin-left: 15px;"><font color="#595959"><b>The 5' gene junction (genomic coordinates):</b></font></p>
         <input type="text" class="geneinfo" id="5primeloc" placeholder="130167703" style="margin-left: 15px"  value="{{ params.loc5prime }}">
@@ -299,7 +324,7 @@
       <div class="inner">
         <h2 style="font-size: 115%; text-align: center;"><font color="white"><b>Enter the 3' gene partner</b></font></p></h2>
         <div>
-          <p style="text-align: left; margin-left: 15px;"><font color="#595959"><b>The 3' gene (symbol or ensembl ID):</b></font></p>
+          <p style="text-align: left; margin-left: 15px;"><font color="#595959"><b>The 3' gene (symbol or Ensembl ID):</b></font></p>
           <input type="text" class="geneinfo" id="3primegene" placeholder="DNM3" style="margin-left: 15px; margin-bottom: 20px" value="{{ params.gene3prime }}">
           <p style="text-align: left; margin-left: 15px;"><font color="#595959"><b>The 3' gene junction (genomic coordinates):</b></font></p>
           <input type="text" class="geneinfo" id="3primeloc" placeholder="162019992"  style="margin-left: 15px"  value="{{ params.loc3prime }}">
@@ -327,7 +352,7 @@
         </div>
       </div>
       <div class="col-md-2">
-        <button type="submit" class="btn btn-info indexbuttons" onClick="run_example()" style="height: 30px; width: 150px; padding: 0.5cm; margin: 0.3cm; padding-top: 5px;">
+        <button type="submit" class="btn btn-info indexbuttons" onClick="loading(); run_example();" id="examplebutton" style="height: 30px; width: 150px; padding: 0.5cm; margin: 0.3cm; padding-top: 5px;">
           Example
         </button>
       </div>
