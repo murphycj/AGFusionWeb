@@ -7,9 +7,14 @@
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
 
   <script>
-    function loading() {
+    function example_loading() {
       var example_button = document.getElementById("examplebutton");
-      example_button.innerHTML="<span style=\"visibility: visible\" class=\"glyphicon glyphicon-refresh glyphicon-refresh-animate\"></span>Loading...";
+      this.innerHTML="<span style=\"visibility: visible\" class=\"glyphicon glyphicon-refresh glyphicon-refresh-animate\"></span> Loading...";
+    }
+
+    function go_loading() {
+      var example_button = document.getElementById("getfusion");
+      example_button.innerHTML="<span style=\"visibility: visible\" class=\"glyphicon glyphicon-refresh glyphicon-refresh-animate\"></span> Loading...";
     }
 
     function run_example() {
@@ -80,10 +85,6 @@
     }
 
     function get_fusion() {
-
-      var go_button = document.getElementById("getfusion");
-
-      go_button.innerHTML="<span id=\"testbutton_span\" style=\"visibility: visible\" class=\"glyphicon glyphicon-refresh glyphicon-refresh-animate\"></span>Loading...";
 
       var form = document.createElement("form");
       form.setAttribute("method", "post");
@@ -352,7 +353,7 @@
         </div>
       </div>
       <div class="col-md-2">
-        <button type="submit" class="btn btn-info indexbuttons" onClick="loading(); run_example();" id="examplebutton" style="height: 30px; width: 150px; padding: 0.5cm; margin: 0.3cm; padding-top: 5px;">
+        <button type="submit" class="btn btn-info indexbuttons" onClick="example_loading(); run_example();" id="examplebutton" style="height: 30px; width: 150px; padding: 0.5cm; margin: 0.3cm; padding-top: 5px;">
           Example
         </button>
       </div>
@@ -360,7 +361,9 @@
       <div class="col-md-4" style="text-align: middle;">
         <div style="text-align: middle; vertical-align: center;">
           <!--<form name="fusion" action="{{ url_for('.index') }}" method=post>-->
-          <button type="submit" onClick="get_fusion()" id="getfusion" class="indexbuttons btn btn-info" style="padding: 0.5cm; font-size: 150%; margin: 0.1cm; padding-top: 10px;" name="submitfusion">Go</button>
+          <button type="submit" onClick="go_loading(); get_fusion();" id="getfusion" class="indexbuttons btn btn-info" style="padding: 0.5cm; font-size: 150%; margin: 0.1cm; padding-top: 10px;" name="submitfusion">
+            Go
+          </button>
 
         </div>
       </div>
