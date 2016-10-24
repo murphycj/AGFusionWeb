@@ -9,17 +9,29 @@
   <script>
     function example_loading() {
       var example_button = document.getElementById("examplebutton");
-      this.innerHTML="<span style=\"visibility: visible\" class=\"glyphicon glyphicon-refresh glyphicon-refresh-animate\"></span> Loading...";
+      example_button.innerHTML="<span class=\"glyphicon glyphicon-refresh glyphicon-refresh-animate\"></span> Loading...";
     }
 
     function go_loading() {
-      var example_button = document.getElementById("getfusion");
-      example_button.innerHTML="<span style=\"visibility: visible\" class=\"glyphicon glyphicon-refresh glyphicon-refresh-animate\"></span> Loading...";
+      var button = document.getElementById("getfusion");
+      button.innerHTML="<span class=\"glyphicon glyphicon-refresh glyphicon-refresh-animate\"></span> Loading...";
+    }
+
+    function set_genome() {
+      var genome = document.getElementById("selectgenome");
+      genome.value="{{ params.genome }}";
+    }
+
+    window.onload = function() {
+      set_genome()
     }
 
     function run_example() {
 
-      genome_button_click("grcm38");
+      var genome = document.getElementById("selectgenome");
+      genome.value="GRCm38";
+
+      //genome_button_click("grcm38");
 
       var form = document.createElement("form");
       form.setAttribute("method", "post");
@@ -31,7 +43,7 @@
         loc5prime:"31684294",
         gene3prime:"ENSMUSG00000002413",
         loc3prime:"39648486",
-        genome:"GRCm38",
+        genome:genome.value,
         imageheight:"2",
         imagewidth:"8",
         dpi:"90",
@@ -90,32 +102,13 @@
       form.setAttribute("method", "post");
       form.setAttribute("action", "/");
 
-      //Determine which genome button pressed
-      var genome="";
-
-      if (document.getElementById("grch38").style.backgroundColor==="rgb(211, 211, 211)") {
-        genome = "GRCh38";
-        document.getElementById("grch37").style.backgroundColor="white";
-        document.getElementById("grcm38").style.backgroundColor="white";
-      } else if (document.getElementById("grch37").style.backgroundColor==="rgb(211, 211, 211)") {
-        genome = "GRCh37";
-        document.getElementById("grch38").style.backgroundColor="white";
-        document.getElementById("grcm38").style.backgroundColor="white";
-      } else if (document.getElementById("grcm38").style.backgroundColor==="rgb(211, 211, 211)") {
-        genome = "GRCm38";
-        document.getElementById("grch37").style.backgroundColor="white";
-        document.getElementById("grch38").style.backgroundColor="white";
-      } else {
-        genome = "none";
-      }
-
       var params = {
         submitfusion:'',
         gene5prime:document.getElementById("5primegene").value,
         loc5prime:document.getElementById("5primeloc").value,
         gene3prime:document.getElementById("3primegene").value,
         loc3prime:document.getElementById("3primeloc").value,
-        genome:genome,
+        genome:document.getElementById("selectgenome").value,
         imageheight:document.getElementById("imageheight").value,
         imagewidth:document.getElementById("imagewidth").value,
         dpi:document.getElementById("dpi").value,
@@ -135,7 +128,9 @@
 
       document.body.appendChild(form);
       form.submit();
-      go_button.innerHTML="Go";
+
+      //var button = document.getElementById("getfusion");
+      //button.innerHTML="Go";
     }
 
     function displayOptionalParameters() {
@@ -231,16 +226,20 @@
       border-width: thin;
       border-style: solid;
       color: black;
-      width: 200px;
       height: 50px;
     }
     .indexbuttons:hover {
       background-color: #999999;
+      border-color: #bfbfbf;
+    }
+    .indexbuttons:active {
+      background-color: #999999;
+      border-color: #bfbfbf;
     }
 
     .geneinfo {
       border-radius:5px;
-      width: 300px;
+      width: 80%;
       height: 35px;
     }
 
@@ -303,6 +302,17 @@
         to { transform: scale(1) rotate(360deg);}
     }
 
+    .glyphicon-refresh-animate {
+      animation: spin .7s infinite linear;
+      -webkit-animation: spin2 .7s infinite linear;
+      -moz-animation: spin2 .7s infinite linear;
+    }
+
+    @-moz-keyframes spin2 {
+      from { -moz-transform: rotate(0deg);}
+      to { -moz-transform: rotate(360deg);}
+    }
+
   </style>
 </head>
 
@@ -313,7 +323,7 @@
     <div class="col-md-4" style="text-align: left; padding: 0cm;">
       <div class="inner">
         <h2 style="font-size: 115%; text-align: center;"><font color="white"><b>Enter the 5' gene partner</b></font></p></h2>
-        <p style="text-align: left; margin-left: 15px"><font color="#595959"><b>The 5' gene (symbol or Ensembl ID):</b></font></p>
+        <p style="text-align: left; margin-left: 15px"><font color="#595959"><b>The 5' gene (gene symbol or Ensembl ID):</b></font></p>
         <input type="text" class="geneinfo" id="5primegene" placeholder="FGFR2" style="margin-left: 15px; margin-bottom: 20px"  value="{{ params.gene5prime }}">
         <p style="text-align: left; margin-left: 15px;"><font color="#595959"><b>The 5' gene junction (genomic coordinates):</b></font></p>
         <input type="text" class="geneinfo" id="5primeloc" placeholder="130167703" style="margin-left: 15px"  value="{{ params.loc5prime }}">
@@ -325,35 +335,41 @@
       <div class="inner">
         <h2 style="font-size: 115%; text-align: center;"><font color="white"><b>Enter the 3' gene partner</b></font></p></h2>
         <div>
-          <p style="text-align: left; margin-left: 15px;"><font color="#595959"><b>The 3' gene (symbol or Ensembl ID):</b></font></p>
-          <input type="text" class="geneinfo" id="3primegene" placeholder="DNM3" style="margin-left: 15px; margin-bottom: 20px" value="{{ params.gene3prime }}">
+          <p style="text-align: left; margin-left: 15px;"><font color="#595959"><b>The 3' gene (gene symbol or Ensembl ID):</b></font></p>
+          <input type="text" class="geneinfo" id="3primegene" placeholder="DNM3" style="margin-left: 15px; margin-bottom: 20px;" value="{{ params.gene3prime }}">
           <p style="text-align: left; margin-left: 15px;"><font color="#595959"><b>The 3' gene junction (genomic coordinates):</b></font></p>
           <input type="text" class="geneinfo" id="3primeloc" placeholder="162019992"  style="margin-left: 15px"  value="{{ params.loc3prime }}">
         </div>
       </div>
     </div>
 
-    <div class="col-md-4" style="text-align: center; padding: 0cm;">
+    <div class="col-md-4" style="text-align: middle; padding: 0cm;">
       <div class="inner">
-        <h2 style="font-size: 115%; text-align: center;"><font color="white"><b>Select a reference genome</b></font></p></h2>
-        <div class="btn-group-vertical btn-group-lg" role="group" aria-label="..." style="margin-top: 15px;">
+        <h2 style="font-size: 115%;"><font color="white"><b>Select a reference genome</b></font></p></h2>
+        <!--<div class="btn-group-vertical btn-group-lg" role="group" aria-label="..." style="margin-top: 15px;">
           <button type="button" id="grcm38" onClick="genome_button_click('grcm38')" class="btn btn-default" style="font-size: 90%; background-color: {{ params.grcm38_color }};">GRCm38/mm10</button>
           <button type="button" id="grch37" onClick="genome_button_click('grch37')" class="btn btn-default" style="font-size: 90%; background-color: {{ params.grch37_color }};">GRCh37/hg19</button>
           <button type="button" id="grch38" onClick="genome_button_click('grch38')" class="btn btn-default" style="font-size: 90%; background-color: {{ params.grch38_color }};">GRCh38/hg38</button>
         </div>
+        -->
+        <select class="form-control" style="width: 50%; margin-left: 25%; height: 15%; margin-top: 20%;" id="selectgenome">
+          <option value="GRCh38" selected="disabled">GRCh38</option>
+          <option value="GRCh37" selected="selected">GRCh37</option>
+          <option value="GRCm38" selected="disabled">GRCm38</option>
+        </select>
       </div>
     </div>
 
     <div class="row">
       <div class="col-md-2" style="text-align: center; padding 0cm;">
         <div style="text-align: middle; vertical-align: center;">
-          <button type="submit" class="btn btn-info indexbuttons" onClick="displayOptionalParameters()" style="height: 30px; padding: 0.5cm; margin: 0.3cm; padding-top: 5px;">
-            <span class="glyphicon glyphicon-plus"></span> Optional parameters
+          <button type="submit" class="btn btn-info indexbuttons" onClick="displayOptionalParameters()" style="height: 40px; padding: 0.5cm; margin: 0.3cm; padding-top: 2px; font-size: 85%; width: 90%; margin-top: 5%;">
+            Optional<br>parameters
           </button>
         </div>
       </div>
       <div class="col-md-2">
-        <button type="submit" class="btn btn-info indexbuttons" onClick="example_loading(); run_example();" id="examplebutton" style="height: 30px; width: 150px; padding: 0.5cm; margin: 0.3cm; padding-top: 5px;">
+        <button type="submit" class="btn btn-info indexbuttons" onClick="example_loading(); run_example();" id="examplebutton" style="height: 30px; width: 90%; font-size: 85%; padding: 0.5cm; margin: 0.3cm; padding-top: 5px; margin-top: 8%;">
           Example
         </button>
       </div>
@@ -361,7 +377,7 @@
       <div class="col-md-4" style="text-align: middle;">
         <div style="text-align: middle; vertical-align: center;">
           <!--<form name="fusion" action="{{ url_for('.index') }}" method=post>-->
-          <button type="submit" onClick="go_loading(); get_fusion();" id="getfusion" class="indexbuttons btn btn-info" style="padding: 0.5cm; font-size: 150%; margin: 0.1cm; padding-top: 10px;" name="submitfusion">
+          <button type="submit" onClick="go_loading(); get_fusion();" id="getfusion" class="btn btn-info indexbuttons" style="padding: 0.5cm; font-size: 150%; margin: 0.1cm; padding-top: 10px; width: 50%; margin-top: 1%;" name="submitfusion">
             Go
           </button>
 

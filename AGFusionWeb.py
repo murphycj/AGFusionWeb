@@ -94,12 +94,12 @@ def check_params(params):
 def check_fusion_input(params):
     #check fusion input
 
-    if params['genome']=='none':
+    #if params['genome']=='none':
 
-        params['inputerrormsg']="Select a reference genome."
-        params['inputerror']='visible'
+    #    params['inputerrormsg']="Select a reference genome."
+    #    params['inputerror']='visible'
 
-        return None,render_template('index.html',params=params)
+    #    return None,render_template('index.html',params=params)
 
     if request.form['loc5prime']=='':
 
@@ -137,12 +137,9 @@ def set_genome(params):
 def session_timeout():
     session.permanent=True
     app.permanent_session_lifetime=timedelta(minutes=60)
-    print 'boo'
 
 @app.route('/',methods=['GET','POST'])
 def index():
-    #if 'gallery_count' not in session:
-    #    session['gallery_count']=0
 
     params={}
     params['gene5prime'] = ""
@@ -160,7 +157,7 @@ def index():
     params['imagewidth'] = "8"
     params['imageheight'] = "2"
     params['scale'] = "0"
-    params['genome'] = ""
+    params['genome'] = "GRCm38"
     params['plotdisplay']='none'
     params['inputerror']='hidden'
     params['optionalparameterdisplay']='none'
