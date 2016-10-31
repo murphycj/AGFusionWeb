@@ -4,9 +4,9 @@
 <head>
   <script type="text/javascript" src="{{ url_for('static', filename='javascripts/main.js') }}"></script>
   <script type="text/javascript" src="{{ url_for('static', filename='javascripts/mpld3.v0.2.js') }}"></script>
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
 
   <script>
+
     function example_loading() {
       var example_button = document.getElementById("examplebutton");
       example_button.innerHTML="<span class=\"glyphicon glyphicon-refresh glyphicon-refresh-animate\"></span> Loading...";
@@ -159,6 +159,16 @@
       var pressed = document.getElementById(button_id);
       pressed.style.backgroundColor="lightgrey"
     }
+
+    jQuery(document).ready(function () {
+      if ($("[rel=tooltip]").length) {
+          jQuery("[rel=tooltip]").tooltip({
+              placement: 'right',
+              trigger: "hover",
+              delay: "0"
+          });
+      }
+    });
 
 </script>
 
@@ -323,9 +333,23 @@
     <div class="col-md-4" style="text-align: left; padding: 0cm;">
       <div class="inner">
         <h2 style="font-size: 115%; text-align: center;"><font color="white"><b>Enter the 5' gene partner</b></font></p></h2>
-        <p style="text-align: left; margin-left: 15px"><font color="#595959"><b>The 5' gene (gene symbol or Ensembl ID):</b></font></p>
+        <p style="text-align: left; margin-left: 15px">
+          <font color="#595959">
+            <b>
+              The 5' gene
+            <span class="glyphicon glyphicon-question-sign" rel="tooltip" title="You can enter either the gene symbol or Ensembl gene ID."></span>
+            </b>
+          </font>
+        </p>
         <input type="text" class="geneinfo" id="5primegene" placeholder="FGFR2" style="margin-left: 15px; margin-bottom: 20px"  value="{{ params.gene5prime }}">
-        <p style="text-align: left; margin-left: 15px;"><font color="#595959"><b>The 5' gene junction (genomic coordinates):</b></font></p>
+        <p style="text-align: left; margin-left: 15px;">
+          <font color="#595959">
+            <b>
+              The 5' gene junction
+              <span class="glyphicon glyphicon-question-sign" rel="tooltip" title="Genomic location of the predicted fusion for the 5' gene partner. The 1-based position that is the first nucleotide included in the fusion after the junction."></span>
+            </b>
+          </font>
+        </p>
         <input type="text" class="geneinfo" id="5primeloc" placeholder="130167703" style="margin-left: 15px"  value="{{ params.loc5prime }}">
       </div>
 
@@ -335,9 +359,23 @@
       <div class="inner">
         <h2 style="font-size: 115%; text-align: center;"><font color="white"><b>Enter the 3' gene partner</b></font></p></h2>
         <div>
-          <p style="text-align: left; margin-left: 15px;"><font color="#595959"><b>The 3' gene (gene symbol or Ensembl ID):</b></font></p>
+          <p style="text-align: left; margin-left: 15px;">
+            <font color="#595959">
+              <b>
+                The 3' gene
+                <span class="glyphicon glyphicon-question-sign" rel="tooltip" title="You can ender either the gene symbol or Ensembl gene ID."></span>
+              </b>
+            </font>
+          </p>
           <input type="text" class="geneinfo" id="3primegene" placeholder="DNM3" style="margin-left: 15px; margin-bottom: 20px;" value="{{ params.gene3prime }}">
-          <p style="text-align: left; margin-left: 15px;"><font color="#595959"><b>The 3' gene junction (genomic coordinates):</b></font></p>
+          <p style="text-align: left; margin-left: 15px;">
+            <font color="#595959">
+              <b>
+                The 3' gene junction
+                <span class="glyphicon glyphicon-question-sign" rel="tooltip" title="Genomic location of the predicted fusion for the 3' gene partner. The 1-based position that is the first nucleotide included in the fusion after the junction."></span>
+              </b>
+            </font>
+          </p>
           <input type="text" class="geneinfo" id="3primeloc" placeholder="162019992"  style="margin-left: 15px"  value="{{ params.loc3prime }}">
         </div>
       </div>

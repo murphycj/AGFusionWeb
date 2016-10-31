@@ -10,9 +10,15 @@ import matplotlib.pyplot as plt, mpld3
 from flask import Flask, request, session, g, redirect, url_for, abort, \
      render_template, flash, send_file
 import pyensembl
+from flask_errormail import mail_on_500
+
+ADMINISTRATORS = (
+    'murphy.charlesj@gmail.com'
+)
 
 app = Flask(__name__)
 app.config.from_object(__name__)
+mail_on_500(app, ADMINISTRATORS)
 
 db = agfusion.AGFusionDB(
     '/Users/charlesmurphy/Desktop/Research/AGFusion/AGFusion/agfusion/data/agfusion.db'
