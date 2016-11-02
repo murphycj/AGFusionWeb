@@ -1,30 +1,49 @@
 {% extends "layout.html" %}
 {% block body %}
+<div class="container-fluid" style="width:100%; text-align: center;" id="maindiv">
+  <div class="row">
+    <div class="col-md-2"></div>
+      <div class="col-md-8">
+        <p style="text-align: center; font-size: 120%; color: black; width:100%;">
+          <b>What is AGFusion?</b><br>
+          <p style="text-align: center; font-size: 100%; color: #262626; width:100%;">
+            Annotate Gene Fusion (AGFusion) and its accompanying python package predict the cDNA, CDS, and protein
+            sequences, annotate with PFAM domains, and visualize the protein resulting from a gene fusions.
+            AGFusion predicts all potential fusion isoforms based on all possible isoform combinations from the gene
+            partners.
+          </p>
+        </p>
+        <br>
+        <br>
 
-<p style="text-align: center; font-size: 120%; color: black; width:100%;">
-  <b>What is AGFusion?</b><br>
-  <p style="text-align: center; font-size: 100%; color: #262626; width:100%;">
-    Annotate Gene Fusion (AGFusion) and its accompanying python package predict the cDNA, CDS, and protein<br>
-    sequences as well as annotate (with PFAM domains) and visualize the protein resulting from a gene fusions.<br>
-    AGFusion predicts all potential fusion isoforms based on all possible isoform combinations from the gene<br>
-    partners.
-  </p>
-</p>
-<br>
+        <p style="text-align: center; font-size: 120%; color: black; width:100%;">
+          <b>FAQ</b><br>
+        </p>
 
-<p style="text-align: center; font-size: 120%; color: black; width:100%;">
-  <b>How can I incorporate AGFusion into a computational pipeline?</b><br>
-  <p style="text-align: center; font-size: 100%; color: #262626; width:100%;">
-    You can use the AGFusion python package, which can downloaded at <a href="https://github.com/murphycj/AGFusion">https://github.com/murphycj/AGFusion</a>.
-  </p>
-</p>
+        <p style="text-align: center; font-size: 120%; color: black; width:100%;">
+          <b>How can I incorporate other protein domain annotations?</b><br>
+          <p style="text-align: center; font-size: 100%; color: #262626; width:100%;">
+            Currently, AGFusion only supports PFAM domains, but eventually all protein domain annotations
+            that are available on Ensembl will be available.
+          </p>
+        </p>
 
-<br>
-<p style="text-align: center; font-size: 120%; color: black; width:100%;">
-  <b>How do I cite AGFusion?</b><br>
-  <p style="text-align: center; font-size: 100%; color: #262626; width:100%;">
-    Pending publication...
-  </p>
-</p>
+        <p style="text-align: center; font-size: 120%; color: black; width:100%;">
+          <b>How can I incorporate AGFusion into a computational pipeline?</b><br>
+          <p style="text-align: center; font-size: 100%; color: #262626; width:100%;">
+            You can use the AGFusion python package, which can downloaded at <a href="https://github.com/murphycj/AGFusion">https://github.com/murphycj/AGFusion</a>.
+          </p>
+        </p>
 
+        <br>
+        <p style="text-align: center; font-size: 120%; color: black; width:100%;">
+          <b>How do I cite AGFusion?</b><br>
+          <p style="text-align: center; font-size: 100%; color: #262626; width:100%;">
+            Manuscript under review. You can cite bioRxiv for now: <a href="http://dx.doi.org/10.1101/080903">http://dx.doi.org/10.1101/080903</a>
+          </p>
+        </p>
+      </div>
+    <div class="col-md-2"></div>
+  </div>
+</div>
 {% endblock %}

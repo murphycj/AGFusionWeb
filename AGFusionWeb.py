@@ -3,6 +3,7 @@ import os
 import uuid
 import pickle
 from datetime import timedelta
+import argparse
 
 import agfusion
 import jsonpickle
@@ -12,6 +13,17 @@ from flask import Flask, request, session, g, redirect, url_for, abort, \
 import pyensembl
 from flask_errormail import mail_on_500
 
+parser = argparse.ArgumentParser(
+    description='AGFusion web application'
+)
+parser.add_argument(
+    '--database',
+    type=str,
+    required=True,
+    help='Path to the database file (e.g. agfusion.db)'
+)
+args = parser.parse_args()
+
 ADMINISTRATORS = (
     'murphy.charlesj@gmail.com'
 )
@@ -20,9 +32,7 @@ app = Flask(__name__)
 app.config.from_object(__name__)
 mail_on_500(app, ADMINISTRATORS)
 
-db = agfusion.AGFusionDB(
-    '/Users/charlesmurphy/Desktop/Research/AGFusion/AGFusion/agfusion/data/agfusion.db'
-)
+db = agfusion.AGFusionDB(args.database)
 
 app.config.update(dict(
     DATABASE=None,
